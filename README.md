@@ -12,4 +12,4 @@ $ python3 -m venv bot-env
 $ source bot-env/bin/activate
 
 3. Use pip like usual:
-$ pip install discord.py aiosqlite aiohttp
+$ pip install python-dotenv discord.py aiosqlite aiohttp

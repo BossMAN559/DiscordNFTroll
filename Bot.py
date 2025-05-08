@@ -4,8 +4,11 @@ from discord.ext.commands import BucketType
 import aiohttp
 import aiosqlite
 import re
+import os
+from dotenv import load_dotenv
 
-DISCORD_BOT_TOKEN = 'YOUR_DISCORD_BOT_TOKEN'
+load_dotenv()
+DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 
 intents = discord.Intents.default()
 intents.members = True
