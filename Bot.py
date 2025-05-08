@@ -115,4 +115,73 @@ async def setnftconfig_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send("You must be an administrator to use this command.")
 
+
+# ✅ Admin command to list all verified users
+@bot.command(name="listverified")
+@commands.has_permissions(administrator=True)
+async def list_verified(ctx):
+    server_name = sanitize_server_name(ctx.guild.name)
+
+    async with aiosqlite.connect("verified_users.db") as db:
+        await db.execute(f'''
+            CREATE TABLE IF NOT EXISTS server_{server_name} (
+                user_id TEXT PRIMARY KEY,
+                eth_address TEXT
+            )
+        ''')
+        cursor = await db.execute(f'''
+            SELECT user_id, eth_address FROM server_{server_name}
+        ''')
+        rows = await cursor.fetchall()
+
+    if not rows:
+        await ctx.send("No users have been verified on this server.")
+        return
+
+    message = "**Verified Users:**\n"
+    for user_id, address in rows:
+        member = ctx.guild.get_member(int(user_id))
+        if member:
+            message += f"- {member.mention} — `{address}`\n"
+        else:
+            message += f"- (Left) <@{user_id}> — `{address}`\n"
+
+    await ctx.send(message)
+
+# ✅ Admin command to unverify a user
+@bot.command(name="unverify")
+@commands.has_permissions(administrator=True)
+async def unverify(ctx, member: discord.Member):
+    server_name = sanitize_server_name(ctx.guild.name)
+    config = await get_server_config(server_name)
+    if not config:
+        await ctx.send("Server NFT config not set.")
+        return
+
+    _, _, role_name = config
+
+    # Remove role
+    role = discord.utils.get(ctx.guild.roles, name=role_name)
+    if role in member.roles:
+        await member.remove_roles(role)
+
+    # Remove from DB
+    async with aiosqlite.connect("verified_users.db") as db:
+        await db.execute(f'''
+            DELETE FROM server_{server_name} WHERE user_id = ?
+        ''', (str(member.id),))
+        await db.commit()
+
+    await ctx.send(f"{member.mention} has been unverified and the role removed.")
+
+# Error handler for permission issues
+@list_verified.error
+@unverify.error
+async def admin_cmd_error(ctx, error):
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send("You must be an administrator to use this command.")
+
+
+
+
 bot.run(DISCORD_BOT_TOKEN)
