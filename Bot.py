@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
+print(f'Bot token is {DISCORD_BOT_TOKEN}')
 
 intents = discord.Intents.default()
 intents.members = True
