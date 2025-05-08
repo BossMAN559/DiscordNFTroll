@@ -6,6 +6,7 @@ import aiosqlite
 import re
 import os
 from dotenv import load_dotenv
+import random
 
 load_dotenv()
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
