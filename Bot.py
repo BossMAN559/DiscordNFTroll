@@ -17,7 +17,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 
-INFURA_URL = 'https://mainnet.infura.io/v3/'YOUR_INFURA_PROJECT_ID
+INFURA_URL = 'https://mainnet.infura.io/v3/{YOUR_INFURA_PROJECT_ID}'
 NFT_CONTRACT_ADDRESS = '0xEb0Ddc0579CF3894C78ae2C4A7d5ec3B36bFa13A'.lower()
 ROLE_NAME = 'Verified NFT Holder'
 
