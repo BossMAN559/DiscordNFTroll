@@ -65,7 +65,11 @@ async def on_ready():
 @bot.command(name="setnftconfig")
 @commands.has_permissions(administrator=True)
 async def setnftconfig(ctx, alchemy_key: str, nft_contract: str, role_name: str):
+    print(f'server name as {ctx.guild.name}')
     server_name = sanitize_server_name(ctx.guild.name)
+    print(f'alchemy_key as {alchemy_key}')
+    print(f'nft_contract as {nft_contract}')
+    print(f'role_name as {role_name}')
     await set_server_config(server_name, alchemy_key, nft_contract, role_name)
     await ctx.send("NFT verification config saved for this server.")
 
