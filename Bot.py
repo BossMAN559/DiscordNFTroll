@@ -202,6 +202,16 @@ async def list_verified_error(ctx, error):
     elif isinstance(error, commands.MissingPermissions):
         await ctx.send("You must be an administrator to use this command.")
 
+@bot.command()
+async def roll(ctx, dice: str):
+    """Rolls a dice in NdN format."""
+    try:
+        rolls, limit = map(int, dice.split('d'))
+    except Exception:
+        await ctx.send('Format has to be in NdN!')
+        return
 
+    result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
+    await ctx.send(result)
 
 bot.run(DISCORD_BOT_TOKEN)
