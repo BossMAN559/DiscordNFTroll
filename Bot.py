@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord.ext.commands import BucketType
 import aiohttp
 import aiosqlite
 import re
@@ -66,6 +67,7 @@ async def setnftconfig(ctx, alchemy_key: str, nft_contract: str, *, role_name: s
 
 # ✅ Verify command for users
 @bot.command(name="verify")
+@commands.cooldown(rate=1, per=60.0, type=BucketType.user)  # 1 use per 60 seconds per user
 async def verify(ctx, eth_address: str):
     server_name = sanitize_server_name(ctx.guild.name)
     user_id = str(ctx.author.id)
@@ -118,6 +120,7 @@ async def setnftconfig_error(ctx, error):
 
 # ✅ Admin command to list all verified users
 @bot.command(name="listverified")
+@commands.cooldown(rate=1, per=30.0, type=BucketType.guild)  # 1 per 30 sec per guild
 @commands.has_permissions(administrator=True)
 async def list_verified(ctx):
     server_name = sanitize_server_name(ctx.guild.name)
@@ -181,6 +184,19 @@ async def admin_cmd_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send("You must be an administrator to use this command.")
 
+@verify.error
+async def verify_error(ctx, error):
+    if isinstance(error, commands.CommandOnCooldown):
+        await ctx.send(f"You're doing that too much! Try again in {int(error.retry_after)} seconds.")
+    else:
+        raise error
+
+@list_verified.error
+async def list_verified_error(ctx, error):
+    if isinstance(error, commands.CommandOnCooldown):
+        await ctx.send(f"Please wait {int(error.retry_after)} seconds before using this command again.")
+    elif isinstance(error, commands.MissingPermissions):
+        await ctx.send("You must be an administrator to use this command.")
 
 
 
