@@ -6,7 +6,6 @@ import aiosqlite
 import re
 import os
 from dotenv import load_dotenv
-import random
 
 load_dotenv()
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
@@ -66,7 +65,6 @@ async def on_ready():
 @bot.command(name="setnftconfig")
 @commands.has_permissions(administrator=True)
 async def setnftconfig(ctx, alchemy_key: str, nft_contract: str, *, role_name: str):
-    await ctx.send("Setconfig")
     server_name = sanitize_server_name(ctx.guild.name)
     await set_server_config(server_name, alchemy_key, nft_contract, role_name)
     await ctx.send("NFT verification config saved for this server.")
@@ -203,17 +201,5 @@ async def list_verified_error(ctx, error):
         await ctx.send(f"Please wait {int(error.retry_after)} seconds before using this command again.")
     elif isinstance(error, commands.MissingPermissions):
         await ctx.send("You must be an administrator to use this command.")
-
-@bot.command()
-async def roll(ctx, dice: str):
-    """Rolls a dice in NdN format."""
-    try:
-        rolls, limit = map(int, dice.split('d'))
-    except Exception:
-        await ctx.send('Format has to be in NdN!')
-        return
-
-    result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
-    await ctx.send(result)
 
 bot.run(DISCORD_BOT_TOKEN)
