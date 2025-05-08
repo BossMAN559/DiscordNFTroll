@@ -38,7 +38,7 @@ async def get_server_config(server_name):
 async def set_server_config(server_name, alchemy_key, nft_contract, role_name):
     async with aiosqlite.connect("verified_users.db") as db:
         await db.execute('''
-            INSERT OR REPLACE INTO server_settings (server_name, alchemy_api_key, nft_contract, role_name)
+            INSERT OR REPLACE INTO server_settings (server_name, alchemy_key, nft_contract, role_name)
             VALUES (?, ?, ?, ?)
         ''', (server_name, alchemy_key, nft_contract.lower(), role_name))
         await db.commit()
