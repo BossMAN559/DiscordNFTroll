@@ -62,7 +62,9 @@ async def on_ready():
 
 # ✅ Admin command to set NFT config
 @bot.command(name="setnftconfig")
+    await ctx.send("Setconfig")
 @commands.has_permissions(administrator=True)
+    await ctx.send("admin true")
 async def setnftconfig(ctx, alchemy_key: str, nft_contract: str, *, role_name: str):
     server_name = sanitize_server_name(ctx.guild.name)
     await set_server_config(server_name, alchemy_key, nft_contract, role_name)
