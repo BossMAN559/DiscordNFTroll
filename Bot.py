@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import BucketType
+from web3 import Web3
 import aiohttp
 import aiosqlite
 import re
