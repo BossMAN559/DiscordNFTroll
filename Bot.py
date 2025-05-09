@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord.ext.commands import BucketType
 from web3 import Web3
 import aiohttp
+import requests
 import json
 import aiosqlite
 import re
