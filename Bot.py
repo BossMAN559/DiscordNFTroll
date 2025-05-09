@@ -61,7 +61,7 @@ def save_data(server_name, data):
         json.dump(data, f, indent=4)
 
 def is_nft_owner(address):
-        try:
+    try:
         contract = web3.eth.contract(address=web3.to_checksum_address(NFT_CONTRACT_ADDRESS), abi=ERC721_ABI)
         balance = contract.functions.balanceOf(Web3.to_checksum_address(address)).call()
         return balance > 0
