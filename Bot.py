@@ -80,7 +80,7 @@ async def verify(ctx, eth_address: str):
     server_name = ctx.guild.name.replace(" ", "_")
     user = ctx.author
 
-    if not web3.utils.isAddress(eth_address):
+    if not Web3.utils.isAddress(eth_address):
         await ctx.send("Invalid Ethereum address.")
         return
 
