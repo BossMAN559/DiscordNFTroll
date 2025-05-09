@@ -61,13 +61,20 @@ def save_data(server_name, data):
         json.dump(data, f, indent=4)
 
 def is_nft_owner(address):
-    contract = web3.eth.contract(address=web3.toChecksumAddress(NFT_CONTRACT_ADDRESS), abi=ERC721_ABI)
-    try:
-        owner = contract.functions.ownerOf(NFT_TOKEN_ID).call()
-        return Web3.to_checksum_address(address) == Web3.to_checksum_address(owner)
+        try:
+        contract = web3.eth.contract(address=web3.to_checksum_address(NFT_CONTRACT_ADDRESS), abi=ERC721_ABI)
+        balance = contract.functions.balanceOf(Web3.to_checksum_address(address)).call()
+        return balance > 0
     except Exception as e:
         print(f"Error checking NFT ownership: {e}")
         return False
+    #contract = web3.eth.contract(address=web3.toChecksumAddress(NFT_CONTRACT_ADDRESS), abi=ERC721_ABI)
+    #try:
+    #    owner = contract.functions.ownerOf(NFT_TOKEN_ID).call()
+    #    return Web3.to_checksum_address(address) == Web3.to_checksum_address(owner)
+    #except Exception as e:
+    #    print(f"Error checking NFT ownership: {e}")
+    #    return False
 
 # === Bot Events and Commands ===
 
