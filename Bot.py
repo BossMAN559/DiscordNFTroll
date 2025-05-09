@@ -64,7 +64,7 @@ def is_nft_owner(address):
     contract = web3.eth.contract(address=web3.toChecksumAddress(NFT_CONTRACT_ADDRESS), abi=ERC721_ABI)
     try:
         owner = contract.functions.ownerOf(NFT_TOKEN_ID).call()
-        return Web3.toChecksumAddress(address) == Web3.toChecksumAddress(owner)
+        return Web3.to_checksum_address(address) == Web3.to_checksum_address(owner)
     except Exception as e:
         print(f"Error checking NFT ownership: {e}")
         return False
@@ -80,7 +80,7 @@ async def verify(ctx, eth_address: str):
     server_name = ctx.guild.name.replace(" ", "_")
     user = ctx.author
 
-    if not Web3.is_Address(eth_address):
+    if not Web3.is_address(eth_address):
         await ctx.send("Invalid Ethereum address.")
         return
 
